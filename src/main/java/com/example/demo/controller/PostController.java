@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.entity.Post;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.services.PostsService;
 
@@ -10,6 +11,14 @@ import java.util.List;
 @RestController
 public class PostController {
 
+
+    PostsService postsService;
+
+    @Autowired
+    public PostController(PostsService postsService) {
+        this.postsService = postsService;
+    }
+
     /**
      * Show how to use RequestMapping for return all elements
      *
@@ -17,7 +26,7 @@ public class PostController {
      */
     @RequestMapping("/posts")
     public List<Post> getPosts(){
-        return new PostsService().getPosts();
+        return postsService.getPosts();
     }
 
     /**
@@ -28,7 +37,7 @@ public class PostController {
      */
     @RequestMapping("/posts/{id}")
     public Post getPostById(@PathVariable int id){
-        return new PostsService().getPost(id);
+        return postsService.getPostById(id);
     }
 
     /**
@@ -38,7 +47,7 @@ public class PostController {
      */
     @PostMapping("/posts")
     public void addPost(@RequestBody Post listElement){
-        new PostsService().addPost(listElement);
+        postsService.addPost(listElement);
     }
 
     /**
@@ -49,7 +58,7 @@ public class PostController {
      */
     @PutMapping("/posts/{id}")
     public void updatePost(@RequestBody Post post,@PathVariable int id){
-        new PostsService().updatePost(post, id);
+        postsService.updatePost(post, id);
     }
 
     /**
@@ -58,7 +67,7 @@ public class PostController {
      */
     @DeleteMapping("/posts/{id}")
     public void deletePost(@PathVariable int id){
-        new PostsService().deletePost(id);
+        postsService.deletePost(id);
     }
 
 }

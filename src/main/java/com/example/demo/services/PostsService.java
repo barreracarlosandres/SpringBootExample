@@ -14,7 +14,7 @@ public class PostsService{
     /**
      * Method use for initializer the Post
      */
-    static private List<Post> posts = new ArrayList<>(Arrays.asList(
+    private static List<Post> posts = new ArrayList<>(Arrays.asList(
             new Post(1, "accounts", getDemoText()),
             new Post(2, "chevy", getDemoText()),
             new Post(3, "cooking", getDemoText()),
@@ -37,7 +37,7 @@ public class PostsService{
      * @param id_post the id, unique, that represent the Post
      * @return Post found in the array
      */
-    public Post getPost(int id_post){
+    public Post getPostById(int id_post){
         for (Post post: posts) {
             if(post.getPostId() == id_post)
                 return post;
