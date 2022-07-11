@@ -1,5 +1,5 @@
 
-## Paso 5
+## Paso 6
 
 ### Objetivo
 - Implementar un ejemplo básico de APIRest de un Post con datos desde un arreglo
@@ -7,6 +7,8 @@
 - Se ajustaron los Test separando pruebas unitarias de pruebas funcionales
 - Se adicionó validaciones de datos en Post.java y captura de excepciones la cueles se muestran como objeto json
 - Se ajustó el código a una arquitectura hexagonal
+- paso6
+  - Se adicionó funcionalidad para hacer rollback de una transacción anterior
 
 ### Métodos implementados
 | Método (podría con postman) | Cómo usarlo                                                                                                           | Retorna                                              |

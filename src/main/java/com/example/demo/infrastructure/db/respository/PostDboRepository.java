@@ -5,7 +5,6 @@ import com.example.demo.application.respository.PostRepository;
 import com.example.demo.common.domain.exceptions.RuntimeExceptionExistValue;
 import com.example.demo.common.infrastructure.exception.RuntimeExceptionNullPost;
 import com.example.demo.domain.Post;
-import com.example.demo.infrastructure.db.dbo.PostEntity;
 import com.example.demo.infrastructure.db.mapper.MapperPostEntity;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ public class PostDboRepository implements PostRepository {
     private final MapperPostEntity mapperPostEntity = new MapperPostEntity();
 
     DBArrayPosts dbArrayPosts = DBArrayPosts.getInstance();
-
 
     /**
      * Function to get all Posts
@@ -31,13 +29,21 @@ public class PostDboRepository implements PostRepository {
 
     @Override
     public boolean addPost(Post newPostToAdd) {
-
+        
+        boolean isAdded;
+        
         int postId = this.getPositionInDBOfPost(newPostToAdd.getIdPost());
 
         if (postId != -1) {
             throw new RuntimeExceptionExistValue("Ya existe el Post");
         }
-        return dbArrayPosts.add(mapperPostEntity.toDdo(newPostToAdd));
+        if(dbArrayPosts.add(mapperPostEntity.toDdo(newPostToAdd))){
+            isAdded = true;
+            LastTransactionPost.addIdPostAdded(newPostToAdd.getIdPost());
+        } else {
+            isAdded = false;
+        }
+        return isAdded;
     }
 
     @Override
@@ -57,22 +63,11 @@ public class PostDboRepository implements PostRepository {
         if(idPostToDelete == -1){
             throw new RuntimeExceptionNullPost("Post no existe");
         } else {
+            Post postDelete = this.getPostById(idPostToDelete);
+            LastTransactionPost.addLastPostDeleted(postDelete);
             dbArrayPosts.remove(postId);
         }
         return true;
-
-//        boolean isDeleted = false;
-//        for (int i = 0; i < dbArrayPosts.size(); i++) {
-//            PostEntity tempPostEntity = dbArrayPosts.get(i);
-//            if (tempPostEntity.getIdPost() == idPostToDelete) {
-//                dbArrayPosts.remove(i);
-//                isDeleted = true;
-//                break;
-//            }
-//        }
-//        return isDeleted;
-//         TODO pendiente por ajustar este método para usar el de buscar
-//          - se debería enviar excepción
     }
 
     @Override
@@ -95,5 +90,19 @@ public class PostDboRepository implements PostRepository {
             }
         }
         return positionPost;
+    }
+
+    public void undoAddedPost() {
+        int idPostToDelete = LastTransactionPost.getIdPostAdded();
+        if(idPostToDelete != -1) {
+            this.deletePostById(LastTransactionPost.getIdPostAdded());
+        }
+    }
+
+    public void undoDeletedPost() {
+        Post postDeleted = LastTransactionPost.getPostDeleted();
+        if(postDeleted != null) {
+            dbArrayPosts.add(mapperPostEntity.toDdo(postDeleted));
+        }
     }
 }
