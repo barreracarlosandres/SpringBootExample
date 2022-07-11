@@ -8,7 +8,9 @@ import com.example.demo.domain.Post;
 import com.example.demo.infrastructure.db.mapper.MapperPostEntity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class PostDboRepository implements PostRepository {
 
@@ -76,6 +78,8 @@ public class PostDboRepository implements PostRepository {
         if (postId == -1) {
             throw new RuntimeExceptionNullPost("Post no existe");
         } else {
+            Post postBeforeUpdateTitle = getPostById(idPostToUpdate);
+            LastTransactionPost.addPostUpdatedTitle(Integer.valueOf(postId), postBeforeUpdateTitle);
             dbArrayPosts.set(postId, mapperPostEntity.toDdo(postUpdated));
         }
         return true;
@@ -103,6 +107,16 @@ public class PostDboRepository implements PostRepository {
         Post postDeleted = LastTransactionPost.getPostDeleted();
         if(postDeleted != null) {
             dbArrayPosts.add(mapperPostEntity.toDdo(postDeleted));
+        }
+    }
+
+    public void undoUpdateTitlePost() {
+        Map<Integer, Post> data = LastTransactionPost.getPostBeforeUpdatedTitle();
+        Iterator iterator = data.keySet().iterator();
+
+        if(iterator.hasNext()){
+            Object key   = iterator.next();
+            dbArrayPosts.set(Integer.parseInt(key.toString()), mapperPostEntity.toDdo(data.get(key)));
         }
     }
 }

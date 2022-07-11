@@ -40,9 +40,17 @@ class PostDboRepositoryTest {
 
     }
 
-    @Disabled("pending to implement")
+//    @Disabled("pending to implement")
     @Test
-    void updatePostById() {
-//        TODO implementar este test
+    void updateTitleOfPostAndThenUndo() {
+        // arrange
+        PostDboRepository postDboRepository = new PostDboRepository();
+        Post postUpdated = new Post(1, "titulo original", "body original");
+        // act
+        postDboRepository.updatePostById(postUpdated, 1);
+        postDboRepository.undoUpdateTitlePost();
+        // assert
+        Assertions.assertTrue( postDboRepository.getPostById(postUpdated.getIdPost()).getTitle() == "accounts" );
+
     }
 }
