@@ -18,9 +18,9 @@ public class Post {
      */
     public Post(int idPost, String title, String body) {
 
-        Validations.validateValueGreaterThanZero(idPost, "idPost debe ser mayor que 0");
-        Validations.validateNotNull(title, "El titulo no puede ser nulo");
-        Validations.validateNotNull(body, "El cuerpo del post no puede ser nulo");
+        Validations.valueGreaterThanZero(idPost, "idPost debe ser mayor que 0");
+        Validations.notNull(title, "El titulo no puede ser nulo");
+        Validations.notNull(body, "El cuerpo del post no puede ser nulo");
 
         this.idPost = idPost;
         this.title = title;

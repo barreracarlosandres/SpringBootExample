@@ -34,7 +34,12 @@ class PostControllerTest {
 
     @Test
     void getAllPosts() throws Exception {
-        mocMvc.perform(get("/posts").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$[0].idPost", is(1))).andExpect(jsonPath("$[1].idPost", is(2)));
+        mocMvc.perform(get("/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].idPost", is(1)))
+                .andExpect(jsonPath("$[1].idPost", is(2)));
     }
 
     @Test
@@ -176,6 +181,10 @@ class PostControllerTest {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(100).withTitle("Prueba add").build();
         //act - assert
-        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost()).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("message", is("Post no existe")));
     }
 }

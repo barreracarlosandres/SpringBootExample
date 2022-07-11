@@ -31,7 +31,7 @@ public final class DBArrayPosts {
     }
 
     public List<PostEntity> getAllPosts() {
-        return new ArrayList<PostEntity>(postsList);  // Do this to get inmutable list
+        return new ArrayList<PostEntity>(postsList);        // Did it to get inmutable List
     }
 
     /**

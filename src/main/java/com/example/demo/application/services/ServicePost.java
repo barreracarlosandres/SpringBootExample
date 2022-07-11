@@ -25,45 +25,45 @@ public class ServicePost {
      * @return List of Posts
      */
     public List<Post> getPosts() {
-        return postRepository.getPosts();
+        return postRepository.getAllPosts();
     }
 
     /**
      * Function to get the post by id
      *
-     * @param idPost the id, unique, that represent the Post
+     * @param idPostToFind the id, unique, that represent the Post
      * @return Post found in the array
      */
-    public Post getPostById(int idPost) {
-        return postRepository.getPostById(idPost);
+    public Post getPostById(int idPostToFind) {
+        return postRepository.getPostById(idPostToFind);
     }
 
     /**
      * Funtion to add Post to the Array
      *
-     * @param listElement object that represent the Post Object to be added
+     * @param postToAdd object that represent the Post Object to be added
      */
-    public boolean addPost(Post listElement) {
-        return postRepository.addPost(listElement);
+    public boolean addPost(Post postToAdd) {
+        return postRepository.addPost(postToAdd);
     }
 
     /**
      * Function to update Post
      *
-     * @param post   Object that correspond to the new data of Post to be updated
-     * @param idPost id that represent Post to be updated
+     * @param postUpdated   Object that correspond to the new data of Post to be updated
+     * @param idPostToUpdate id that represent Post to be updated
      */
-    public boolean updatePostById(Post post, int idPost) {
-        return postRepository.updatePostById(post, idPost);
+    public boolean updatePostById(Post postUpdated, int idPostToUpdate) {
+        return postRepository.updatePostById(postUpdated, idPostToUpdate);
     }
 
     /**
      * Function for delete the Post
      *
-     * @param idPost id that represent the Post to be deleted
+     * @param idPostToDelete id that represent the Post to be deleted
      */
-    public boolean deletePostById(int idPost) {
-        return postRepository.deletePostById(idPost);
+    public boolean deletePostById(int idPostToDelete) {
+        return postRepository.deletePostById(idPostToDelete);
     }
 
 

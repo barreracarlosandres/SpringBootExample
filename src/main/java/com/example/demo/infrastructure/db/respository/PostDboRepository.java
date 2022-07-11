@@ -24,7 +24,7 @@ public class PostDboRepository implements PostRepository {
      * @return List of Posts
      */
     @Override
-    public List<Post> getPosts() {
+    public List<Post> getAllPosts() {
         return new ArrayList<>(mapperPostEntity.toDomain(dbArrayPosts.getAllPosts()));  // Do that to make inmutable the List
 //        TODO mejorar este método
     }
@@ -52,16 +52,25 @@ public class PostDboRepository implements PostRepository {
 
     @Override
     public boolean deletePostById(int idPostToDelete) {
-        boolean isDeleted = false;
-        for (int i = 0; i < dbArrayPosts.size(); i++) {
-            PostEntity tempPostEntity = dbArrayPosts.get(i);
-            if (tempPostEntity.getIdPost() == idPostToDelete) {
-                dbArrayPosts.remove(i);
-                isDeleted = true;
-                break;
-            }
+
+        int postId = getPositionInDBOfPost(idPostToDelete);
+        if(idPostToDelete == -1){
+            throw new RuntimeExceptionNullPost("Post no existe");
+        } else {
+            dbArrayPosts.remove(postId);
         }
-        return isDeleted;
+        return true;
+
+//        boolean isDeleted = false;
+//        for (int i = 0; i < dbArrayPosts.size(); i++) {
+//            PostEntity tempPostEntity = dbArrayPosts.get(i);
+//            if (tempPostEntity.getIdPost() == idPostToDelete) {
+//                dbArrayPosts.remove(i);
+//                isDeleted = true;
+//                break;
+//            }
+//        }
+//        return isDeleted;
 //         TODO pendiente por ajustar este método para usar el de buscar
 //          - se debería enviar excepción
     }

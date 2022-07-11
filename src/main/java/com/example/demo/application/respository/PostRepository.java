@@ -6,7 +6,7 @@ import com.example.demo.domain.Post;
 import java.util.List;
 
 public interface PostRepository {
-    List<Post> getPosts();
+    List<Post> getAllPosts();
 
     boolean addPost(Post newPostToAdd);
 
