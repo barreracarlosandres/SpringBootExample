@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RuntimeExceptionExistValue extends RuntimeException {
 
-    private String message;
+    private final String message;
 }

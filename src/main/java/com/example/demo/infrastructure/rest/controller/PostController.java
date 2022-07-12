@@ -79,21 +79,25 @@ public class PostController {
      */
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> deletePost(@PathVariable final int id) {
-        if (postsService.deletePostById(id)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        postsService.deletePostById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /*@PostConstruct
-    public void saludar(){
-        System.out.println("Hola");
+    @PutMapping("/posts/undoUpdate")
+    public ResponseEntity<HttpStatus> undoUpdatedPost() {
+        postsService.undoUpdatedPostInActiveSession();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreDestroy
-    public void despedirse(){
-        System.out.println("Adios");
-    }*/
+    @PutMapping("/posts/undoDeleted")
+    public ResponseEntity<HttpStatus> undoDeletedPost() {
+        postsService.undoDeletedPostInActiveSession();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @PutMapping("/posts/undoAdd")
+    public ResponseEntity<HttpStatus> undoAddedPost() {
+        postsService.undoAddedPostInActiveSession();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

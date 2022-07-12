@@ -3,9 +3,14 @@ package com.example.demo.infrastructure.db.respository;
 
 import com.example.demo.application.respository.PostRepository;
 import com.example.demo.common.domain.exceptions.RuntimeExceptionExistValue;
+import com.example.demo.common.infrastructure.exception.PostMessageExeptions;
 import com.example.demo.common.infrastructure.exception.RuntimeExceptionNullPost;
 import com.example.demo.domain.Post;
 import com.example.demo.infrastructure.db.mapper.MapperPostEntity;
+import com.example.demo.infrastructure.db.respository.db.ArrayPosts;
+import com.example.demo.infrastructure.db.respository.undo.UndoAddedPost;
+import com.example.demo.infrastructure.db.respository.undo.UndoDeletePost;
+import com.example.demo.infrastructure.db.respository.undo.UndoUpdatePost;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,9 +19,10 @@ import java.util.Map;
 
 public class PostDboRepository implements PostRepository {
 
+
     private final MapperPostEntity mapperPostEntity = new MapperPostEntity();
 
-    DBArrayPosts dbArrayPosts = DBArrayPosts.getInstance();
+    ArrayPosts arrayPosts = ArrayPosts.getInstance();
 
     /**
      * Function to get all Posts
@@ -25,27 +31,19 @@ public class PostDboRepository implements PostRepository {
      */
     @Override
     public List<Post> getAllPosts() {
-        return new ArrayList<>(mapperPostEntity.toDomain(dbArrayPosts.getAllPosts()));  // Do that to make inmutable the List
-//        TODO mejorar este método
+        return new ArrayList<>(mapperPostEntity.toDomain(arrayPosts.getAllPosts()));  // Do that to make inmutable the List
     }
 
     @Override
-    public boolean addPost(Post newPostToAdd) {
-        
-        boolean isAdded;
-        
+    public void addPost(Post newPostToAdd) {
+
         int postId = this.getPositionInDBOfPost(newPostToAdd.getIdPost());
 
         if (postId != -1) {
-            throw new RuntimeExceptionExistValue("Ya existe el Post");
+            throw new RuntimeExceptionExistValue(PostMessageExeptions.YA_EXISTE_EL_POST);
         }
-        if(dbArrayPosts.add(mapperPostEntity.toDdo(newPostToAdd))){
-            isAdded = true;
-            LastTransactionPost.addIdPostAdded(newPostToAdd.getIdPost());
-        } else {
-            isAdded = false;
-        }
-        return isAdded;
+        arrayPosts.add(mapperPostEntity.toDdo(newPostToAdd));
+        UndoAddedPost.addIdPostAdded(newPostToAdd.getIdPost());
     }
 
     @Override
@@ -53,70 +51,71 @@ public class PostDboRepository implements PostRepository {
         int postId = getPositionInDBOfPost(idPostToFind);
 
         if (postId == -1) {
-            throw new RuntimeExceptionNullPost("Post no existe");
+            throw new RuntimeExceptionNullPost(PostMessageExeptions.POST_NO_EXISTE);
         }
-        return mapperPostEntity.toDomain(dbArrayPosts.get(postId));
+        return mapperPostEntity.toDomain(arrayPosts.get(postId));
     }
 
     @Override
-    public boolean deletePostById(int idPostToDelete) {
+    public void deletePostById(int idPostToDelete) {
 
         int postId = getPositionInDBOfPost(idPostToDelete);
-        if(idPostToDelete == -1){
-            throw new RuntimeExceptionNullPost("Post no existe");
+        if (postId == -1) {
+            throw new RuntimeExceptionNullPost(PostMessageExeptions.POST_NO_EXISTE);
         } else {
             Post postDelete = this.getPostById(idPostToDelete);
-            LastTransactionPost.addLastPostDeleted(postDelete);
-            dbArrayPosts.remove(postId);
+            UndoDeletePost.addBeforeDelete(postDelete);
+            arrayPosts.remove(postId);
         }
-        return true;
     }
 
     @Override
-    public boolean updatePostById(Post postUpdated, int idPostToUpdate) {
+    public void updatePostById(Post postUpdated, int idPostToUpdate) {
         int postId = getPositionInDBOfPost(idPostToUpdate);
         if (postId == -1) {
-            throw new RuntimeExceptionNullPost("Post no existe");
+            throw new RuntimeExceptionNullPost(PostMessageExeptions.POST_NO_EXISTE);
         } else {
-            Post postBeforeUpdateTitle = getPostById(idPostToUpdate);
-            LastTransactionPost.addPostUpdatedTitle(Integer.valueOf(postId), postBeforeUpdateTitle);
-            dbArrayPosts.set(postId, mapperPostEntity.toDdo(postUpdated));
+            Post postBeforeUpdate = getPostById(idPostToUpdate);
+            UndoUpdatePost.addPositionAndPostBeforeUpdate(Integer.valueOf(postId), postBeforeUpdate);
+            arrayPosts.set(postId, mapperPostEntity.toDdo(postUpdated));
         }
-        return true;
+    }
+
+    @Override
+    public void undoAddedPost() {
+        int idPostToDelete = UndoAddedPost.getIdPostAdded();
+        if (idPostToDelete != -1) {
+            this.deletePostById(UndoAddedPost.getIdPostAdded());
+        }
+    }
+
+    @Override
+    public void undoDeletedPost() {
+        Post postDeleted = UndoDeletePost.getDeleted();
+        if (postDeleted != null) {
+            arrayPosts.add(mapperPostEntity.toDdo(postDeleted));
+        }
+    }
+
+    @Override
+    public void undoUpdatedPost() {
+        Map<Integer, Post> data = UndoUpdatePost.getPositionAndPostBeforeUpdated();
+        Iterator<Integer> iterator = data.keySet().iterator();
+
+        if (iterator.hasNext()) {
+            Object key = iterator.next();
+            arrayPosts.set(Integer.parseInt(key.toString()), mapperPostEntity.toDdo(data.get(key)));
+        }
     }
 
     private int getPositionInDBOfPost(int idPost) {
         int positionPost = -1;
-        for (int i = 0; i < dbArrayPosts.size(); i++) {
-            if (dbArrayPosts.get(i).getIdPost() == idPost) {
+        for (int i = 0; i < arrayPosts.size(); i++) {
+            if (arrayPosts.get(i).getIdPost() == idPost) {
                 positionPost = i;
                 break;
             }
         }
         return positionPost;
-    }
-
-    public void undoAddedPost() {
-        int idPostToDelete = LastTransactionPost.getIdPostAdded();
-        if(idPostToDelete != -1) {
-            this.deletePostById(LastTransactionPost.getIdPostAdded());
-        }
-    }
-
-    public void undoDeletedPost() {
-        Post postDeleted = LastTransactionPost.getPostDeleted();
-        if(postDeleted != null) {
-            dbArrayPosts.add(mapperPostEntity.toDdo(postDeleted));
-        }
-    }
-
-    public void undoUpdateTitlePost() {
-        Map<Integer, Post> data = LastTransactionPost.getPostBeforeUpdatedTitle();
-        Iterator iterator = data.keySet().iterator();
-
-        if(iterator.hasNext()){
-            Object key   = iterator.next();
-            dbArrayPosts.set(Integer.parseInt(key.toString()), mapperPostEntity.toDdo(data.get(key)));
-        }
     }
 }

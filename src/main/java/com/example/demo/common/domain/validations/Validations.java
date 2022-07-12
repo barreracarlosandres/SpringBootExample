@@ -5,15 +5,17 @@ import com.example.demo.common.domain.exceptions.RuntimeExceptionValue;
 
 public class Validations {
 
-    static public void valueGreaterThanZero(int value, String message) {
+    private Validations() {
+    }
+
+    public static void valueGreaterThanZero(int value, String message) {
         if (value <= 0) {
             throw new RuntimeExceptionValue(message);
         }
     }
 
-    static public void notNull(String data, String message) {
-        if(data == null || data.length() == 0)
-        {
+    public static void notNull(String data, String message) {
+        if (data == null || data.length() == 0) {
             throw new RuntimeExceptionNullValue(message);
         }
     }

@@ -43,8 +43,8 @@ public class ServicePost {
      *
      * @param postToAdd object that represent the Post Object to be added
      */
-    public boolean addPost(Post postToAdd) {
-        return postRepository.addPost(postToAdd);
+    public void addPost(Post postToAdd) {
+        postRepository.addPost(postToAdd);
     }
 
     /**
@@ -53,8 +53,8 @@ public class ServicePost {
      * @param postUpdated   Object that correspond to the new data of Post to be updated
      * @param idPostToUpdate id that represent Post to be updated
      */
-    public boolean updatePostById(Post postUpdated, int idPostToUpdate) {
-        return postRepository.updatePostById(postUpdated, idPostToUpdate);
+    public void updatePostById(Post postUpdated, int idPostToUpdate) {
+        postRepository.updatePostById(postUpdated, idPostToUpdate);
     }
 
     /**
@@ -62,8 +62,20 @@ public class ServicePost {
      *
      * @param idPostToDelete id that represent the Post to be deleted
      */
-    public boolean deletePostById(int idPostToDelete) {
-        return postRepository.deletePostById(idPostToDelete);
+    public void deletePostById(int idPostToDelete) {
+        postRepository.deletePostById(idPostToDelete);
+    }
+
+    public void undoUpdatedPostInActiveSession(){
+        postRepository.undoUpdatedPost();
+    }
+
+    public void undoDeletedPostInActiveSession(){
+        postRepository.undoDeletedPost();
+    }
+
+    public void undoAddedPostInActiveSession(){
+        postRepository.undoAddedPost();
     }
 
 

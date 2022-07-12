@@ -57,18 +57,6 @@ class PostControllerTest {
     }
 
     @Test
-    void tryToGetPostByIdThatNotExits() throws Exception {
-
-        // arrange
-        int idPost = 100;
-        // act - assert
-        mocMvc.perform(post("/posts/{id}", idPost)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void addNewPostOk() throws Exception {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(11).withTitle("New Tittle").build();
@@ -131,18 +119,6 @@ class PostControllerTest {
     }
 
     @Test
-    void tryToUpdatePostByIdThatNotExist() throws Exception {
-        //arrange
-        CommandPost post = new PostControllerTestBuilder().withPostId(100).withTitle("Prueba add").build();
-        //act - assert
-        mocMvc.perform(put("/posts/{idPost}", post.getIdPost())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(post)))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("message", is("Post no existe")));
-    }
-
-    @Test
     void tryToUpdatePostByTitleNull() throws Exception {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(100).withTitle(null).build();
@@ -155,18 +131,6 @@ class PostControllerTest {
     }
 
     @Test
-    void tryToUpdatePostByBodyNull() throws Exception {
-        //arrange
-        CommandPost post = new PostControllerTestBuilder().withPostId(100).withBody(null).build();
-        //act - assert
-        mocMvc.perform(put("/posts/{idPost}", post.getIdPost())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(post)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message", is("El cuerpo del post no puede ser nulo")));
-    }
-
-    @Test
     void deletePostByIdThatExits() throws Exception {
         // arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(5).withTitle("Prueba add").build();
@@ -174,17 +138,5 @@ class PostControllerTest {
         mocMvc.perform(delete("/posts/{idPost}", post.getIdPost()).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
         // assert
         mocMvc.perform(delete("/posts/{idPost}", post.getIdPost()).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
-    }
-
-    @Test
-    void deletePostByIdThatNotExits() throws Exception {
-        //arrange
-        CommandPost post = new PostControllerTestBuilder().withPostId(100).withTitle("Prueba add").build();
-        //act - assert
-        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("message", is("Post no existe")));
     }
 }

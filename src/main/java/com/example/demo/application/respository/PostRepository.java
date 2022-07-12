@@ -8,11 +8,17 @@ import java.util.List;
 public interface PostRepository {
     List<Post> getAllPosts();
 
-    boolean addPost(Post newPostToAdd);
+    void addPost(Post newPostToAdd);
 
     Post getPostById(int idPostToFind);
 
-    boolean deletePostById(int idPostToDelete);
+    void deletePostById(int idPostToDelete);
 
-    boolean updatePostById(Post postUpdated, int idPostToUpdate);
+    void updatePostById(Post postUpdated, int idPostToUpdate);
+
+    void undoUpdatedPost();
+
+    void undoDeletedPost();
+
+    void undoAddedPost();
 }

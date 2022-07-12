@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.common.domain.validations.Validations;
+import com.example.demo.common.infrastructure.exception.PostMessageExeptions;
 import lombok.Getter;
 
 @Getter
@@ -18,9 +19,9 @@ public class Post {
      */
     public Post(int idPost, String title, String body) {
 
-        Validations.valueGreaterThanZero(idPost, "idPost debe ser mayor que 0");
-        Validations.notNull(title, "El titulo no puede ser nulo");
-        Validations.notNull(body, "El cuerpo del post no puede ser nulo");
+        Validations.valueGreaterThanZero(idPost, PostMessageExeptions.ID_POST_DEBE_SER_MAYOR_QUE_0);
+        Validations.notNull(title, PostMessageExeptions.EL_TITULO_NO_PUEDE_SER_NULO);
+        Validations.notNull(body, PostMessageExeptions.EL_CUERPO_DEL_POST_NO_PUEDE_SER_NULO);
 
         this.idPost = idPost;
         this.title = title;
