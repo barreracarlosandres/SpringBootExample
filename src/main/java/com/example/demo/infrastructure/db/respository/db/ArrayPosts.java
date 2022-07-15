@@ -18,7 +18,9 @@ public final class ArrayPosts {
                     new PostEntity(2, "chevy", getDemoText()),
                     new PostEntity(3, "cooking", getDemoText()),
                     new PostEntity(4, "not", getDemoText()),
-                    new PostEntity(5, "know", getDemoText())));
+                    new PostEntity(5, "know", getDemoText()),
+                    new PostEntity(6, "know", getDemoText()),
+                    new PostEntity(7, "know", getDemoText())));
 
     private ArrayPosts() {
     }

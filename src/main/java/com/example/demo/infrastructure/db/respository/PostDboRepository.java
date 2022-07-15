@@ -2,6 +2,7 @@ package com.example.demo.infrastructure.db.respository;
 
 
 import com.example.demo.application.respository.PostRepository;
+import com.example.demo.application.respository.PostUndo;
 import com.example.demo.common.domain.exceptions.RuntimeExceptionExistValue;
 import com.example.demo.common.infrastructure.exception.PostMessageExeptions;
 import com.example.demo.common.infrastructure.exception.RuntimeExceptionNullPost;
@@ -17,8 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class PostDboRepository implements PostRepository {
-
+public class PostDboRepository implements PostRepository, PostUndo {
 
     private final MapperPostEntity mapperPostEntity = new MapperPostEntity();
 
@@ -63,7 +63,7 @@ public class PostDboRepository implements PostRepository {
         if (postId == -1) {
             throw new RuntimeExceptionNullPost(PostMessageExeptions.POST_NO_EXISTE);
         } else {
-            Post postDelete = this.getPostById(idPostToDelete);
+            Post postDelete = mapperPostEntity.toDomain(arrayPosts.get(postId));
             UndoDeletePost.addBeforeDelete(postDelete);
             arrayPosts.remove(postId);
         }
@@ -75,8 +75,8 @@ public class PostDboRepository implements PostRepository {
         if (postId == -1) {
             throw new RuntimeExceptionNullPost(PostMessageExeptions.POST_NO_EXISTE);
         } else {
-            Post postBeforeUpdate = getPostById(idPostToUpdate);
-            UndoUpdatePost.addPositionAndPostBeforeUpdate(Integer.valueOf(postId), postBeforeUpdate);
+            Post postBeforeUpdate = mapperPostEntity.toDomain(arrayPosts.get(postId));
+            UndoUpdatePost.addPositionAndPostBeforeUpdate(postId, postBeforeUpdate);
             arrayPosts.set(postId, mapperPostEntity.toDdo(postUpdated));
         }
     }

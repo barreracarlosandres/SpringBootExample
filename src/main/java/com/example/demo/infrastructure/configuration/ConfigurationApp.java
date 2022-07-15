@@ -1,6 +1,7 @@
 package com.example.demo.infrastructure.configuration;
 
 import com.example.demo.application.services.ServicePost;
+import com.example.demo.application.services.ServiceUndoPost;
 import com.example.demo.infrastructure.db.mapper.MapperPostEntity;
 import com.example.demo.infrastructure.db.respository.PostDboRepository;
 import com.example.demo.infrastructure.rest.mapper.MapperPost;
@@ -25,6 +26,11 @@ public class ConfigurationApp {
     @Bean
     public ServicePost postsService() {
         return new ServicePost(postDboRepository());
+    }
+
+    @Bean
+    public ServiceUndoPost serviceUndoPost() {
+        return new ServiceUndoPost(postDboRepository());
     }
 
     @Bean

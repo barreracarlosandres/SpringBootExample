@@ -16,9 +16,4 @@ public interface PostRepository {
 
     void updatePostById(Post postUpdated, int idPostToUpdate);
 
-    void undoUpdatedPost();
-
-    void undoDeletedPost();
-
-    void undoAddedPost();
 }

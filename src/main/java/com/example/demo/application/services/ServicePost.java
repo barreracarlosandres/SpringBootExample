@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ServicePost {
 
-    PostRepository postRepository;
+    private final PostRepository postRepository;
 
     /**
      * Dependency Injection
@@ -65,18 +65,4 @@ public class ServicePost {
     public void deletePostById(int idPostToDelete) {
         postRepository.deletePostById(idPostToDelete);
     }
-
-    public void undoUpdatedPostInActiveSession(){
-        postRepository.undoUpdatedPost();
-    }
-
-    public void undoDeletedPostInActiveSession(){
-        postRepository.undoDeletedPost();
-    }
-
-    public void undoAddedPostInActiveSession(){
-        postRepository.undoAddedPost();
-    }
-
-
 }

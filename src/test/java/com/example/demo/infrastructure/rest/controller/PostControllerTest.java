@@ -1,10 +1,11 @@
 package com.example.demo.infrastructure.rest.controller;
 
 import com.example.demo.application.fabric.CommandPost;
+import com.example.demo.common.infrastructure.exception.PostMessageExeptions;
 import com.example.demo.infrastructure.builder.PostControllerTestBuilder;
 import com.example.demo.infrastructure.configuration.ConfigurationApp;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +62,7 @@ class PostControllerTest {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(11).withTitle("New Tittle").build();
         //act - assert
-        mocMvc.perform(post("/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(post)))
-                .andExpect(status().isCreated());
-        // assert
-        mocMvc.perform(get("/posts/{idPost}", post.getIdPost())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("idPost", is(post.getIdPost())))
-                .andExpect(jsonPath("title", is("New Tittle")));
+        this.postToAddNewPostOk(post);
     }
 
     @Test
@@ -85,7 +76,7 @@ class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(post)))
                 .andExpect(status().isAlreadyReported())
-                .andExpect(jsonPath("message", is("Ya existe el Post")));
+                .andExpect(jsonPath("message", is(PostMessageExeptions.YA_EXISTE_EL_POST)));
     }
 
     @Test
@@ -97,25 +88,16 @@ class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(post)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message", is("idPost debe ser mayor que 0")));
+                .andExpect(jsonPath("message", is(PostMessageExeptions.ID_POST_DEBE_SER_MAYOR_QUE_0)));
     }
 
     @Test
     void updatePostByIdThatExist() throws Exception {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(1).withTitle("tittle modified").build();
-        // act
-        mocMvc.perform(put("/posts/{idPost}", post.getIdPost())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(post)))
-                .andExpect(status().isOk());
+        // act - Assert
+        putToUpdatePostAndCheckOk(post);
         // assert
-        mocMvc.perform(get("/posts/{idPost}", post.getIdPost())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("idPost", is(post.getIdPost())))
-                .andExpect(jsonPath("title", is("tittle modified")));
     }
 
     @Test
@@ -127,16 +109,87 @@ class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(post)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message", is("El titulo no puede ser nulo")));
+                .andExpect(jsonPath("message", is(PostMessageExeptions.EL_TITULO_NO_PUEDE_SER_NULO)));
     }
 
     @Test
     void deletePostByIdThatExits() throws Exception {
         // arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(5).withTitle("Prueba add").build();
-        // act
-        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost()).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-        // assert
-        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost()).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+        // act - assert
+        this.deletePostByIdPost(post);
+    }
+
+    @Test
+    void undoUpdatePostOk() throws Exception {
+        // Arrange
+        CommandPost post = new PostControllerTestBuilder().withPostId(6).withTitle("Prueba add").build();
+        this.putToUpdatePostAndCheckOk(post);
+        // Act - Assert
+        mocMvc.perform(put("/posts/undoUpdated")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void undoDeletePostOk() throws Exception {
+        // Arrange
+        CommandPost post = new PostControllerTestBuilder().withPostId(7).build();
+        this.deletePostByIdPost(post);
+        // Act - Assert
+        mocMvc.perform(put("/posts/undoDeleted")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void undoAddPostOk() throws Exception {
+        // Arrange
+        CommandPost post = new PostControllerTestBuilder().withPostId(15).build();
+        this.postToAddNewPostOk(post);
+        // Act - Assert
+        mocMvc.perform(put("/posts/undoAdded")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void checkOkIdPostAndTitleOfPostById(CommandPost post, String title) throws Exception {
+        mocMvc.perform(get("/posts/{idPost}", post.getIdPost())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("idPost", is(post.getIdPost())))
+                .andExpect(jsonPath("title", is(title)));
+    }
+
+    private void checkPostByIDThatNotExist(CommandPost post) throws Exception {
+        mocMvc.perform(get("/posts/{idPost}", post.getIdPost())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    private void putToUpdatePostAndCheckOk(CommandPost post) throws Exception {
+        mocMvc.perform(put("/posts/{idPost}", post.getIdPost())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(post)))
+                .andExpect(status().isOk());
+    }
+
+    private void deletePostByIdPost(CommandPost post) throws Exception {
+        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void postToAddNewPostOk(CommandPost post) throws Exception {
+        mocMvc.perform(post("/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(post)))
+                .andExpect(status().isCreated());
     }
 }

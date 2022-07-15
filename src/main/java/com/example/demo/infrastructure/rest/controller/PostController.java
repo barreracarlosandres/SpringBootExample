@@ -2,6 +2,7 @@ package com.example.demo.infrastructure.rest.controller;
 
 
 import com.example.demo.application.services.ServicePost;
+import com.example.demo.application.services.ServiceUndoPost;
 import com.example.demo.infrastructure.rest.dto.PostDto;
 import com.example.demo.infrastructure.rest.mapper.MapperPost;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,10 @@ import java.util.List;
 public class PostController {
 
 
-    private final ServicePost postsService;
+    private final ServicePost servicePost;
+
+    private final ServiceUndoPost serviceUndoPost;
+
     private final MapperPost mapperPost;
 
     /**
@@ -23,8 +27,9 @@ public class PostController {
      * Nota: It´s not necessary use the @Autowared, I use just for explicit it
      */
     @Autowired
-    public PostController(ServicePost postsService, MapperPost mapperPost) {
-        this.postsService = postsService;
+    public PostController(ServicePost servicePost, ServiceUndoPost serviceUndoPost,MapperPost mapperPost) {
+        this.servicePost = servicePost;
+        this.serviceUndoPost = serviceUndoPost;
         this.mapperPost = mapperPost;
     }
 
@@ -35,7 +40,7 @@ public class PostController {
      */
     @RequestMapping("/posts")
     public ResponseEntity<List<PostDto>> getPosts() {
-        return new ResponseEntity<>(mapperPost.toDto(postsService.getPosts()), HttpStatus.OK);
+        return new ResponseEntity<>(mapperPost.toDto(servicePost.getPosts()), HttpStatus.OK);
     }
 
     /**
@@ -46,7 +51,7 @@ public class PostController {
      */
     @RequestMapping("/posts/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable int id) {
-        return new ResponseEntity<>(mapperPost.toDto(postsService.getPostById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(mapperPost.toDto(servicePost.getPostById(id)), HttpStatus.OK);
     }
 
     /**
@@ -56,7 +61,7 @@ public class PostController {
      */
     @PostMapping("/posts")
     public ResponseEntity<HttpStatus> addPost(@RequestBody final PostDto postDto) {
-        postsService.addPost(mapperPost.toDomain(postDto));
+        servicePost.addPost(mapperPost.toDomain(postDto));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -68,7 +73,7 @@ public class PostController {
      */
     @PutMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> updatePost(@RequestBody final PostDto postDto, @PathVariable final int id) {
-        postsService.updatePostById(mapperPost.toDomain(postDto), id);
+        servicePost.updatePostById(mapperPost.toDomain(postDto), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -79,25 +84,25 @@ public class PostController {
      */
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> deletePost(@PathVariable final int id) {
-        postsService.deletePostById(id);
+        servicePost.deletePostById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/posts/undoUpdate")
+    @PutMapping("/posts/undoUpdated")
     public ResponseEntity<HttpStatus> undoUpdatedPost() {
-        postsService.undoUpdatedPostInActiveSession();
+        serviceUndoPost.undoUpdatedPostInActiveSession();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/posts/undoDeleted")
     public ResponseEntity<HttpStatus> undoDeletedPost() {
-        postsService.undoDeletedPostInActiveSession();
+        serviceUndoPost.undoDeletedPostInActiveSession();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/posts/undoAdd")
+    @PutMapping("/posts/undoAdded")
     public ResponseEntity<HttpStatus> undoAddedPost() {
-        postsService.undoAddedPostInActiveSession();
+        serviceUndoPost.undoAddedPostInActiveSession();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
