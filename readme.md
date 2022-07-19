@@ -1,5 +1,5 @@
 
-## Paso 6
+## Paso 7
 
 ### Objetivo
 - Implementar un ejemplo básico de APIRest de un Post con datos desde un arreglo
@@ -7,10 +7,13 @@
 - Se ajustaron los Test separando pruebas unitarias de pruebas funcionales
 - Se adicionó validaciones de datos en Post.java y captura de excepciones la cueles se muestran como objeto json
 - Se ajustó el código a una arquitectura hexagonal
-- paso6
+- paso 6
   - Se adicionó funcionalidad para hacer rollback la última transacción anterior
   - Se adicionó test unitarios de Repository
   - Refactor de código y ajustes a clean code
+- paso 7
+  - Se adicionó dockerfile para generar container
+  - Se configurti OpenTelemetry
 ### Métodos implementados
 | Método (podría con postman) | Cómo usarlo                                                                                                           | Retorna                                       |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
@@ -34,3 +37,4 @@
 - Spring boot 2.7.1
 - Lombok 1.18.24
 - Junit 5.8.2
+- Opentelemetry 1.15
