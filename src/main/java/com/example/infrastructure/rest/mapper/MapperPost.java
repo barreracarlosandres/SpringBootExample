@@ -15,6 +15,10 @@ public class MapperPost {
         return new PostDto(post.getIdPost(), post.getTitle(), post.getBody());
     }
 
+    public PostDto toDto(MongoPostEntity post) {
+        return new PostDto(post.getId_post(), post.getTitle(), post.getBody());
+    }
+
     public List<PostDto> toDto(List<Post> post) {
         return post.stream().map(this::toDto).collect(Collectors.toList());
     }

@@ -19,8 +19,6 @@ public class PostController {
 
     private final ServicePost servicePost;
     private final ServiceUndoPost serviceUndoPost;
-
-//    private MongoPostServiceImpl mongoPostServiceImpl;
     private MongoPostRepository mongoPostRepository;
 
     private final MapperPost mapperPost;
@@ -58,6 +56,11 @@ public class PostController {
         return new ResponseEntity<>(mapperPost.toDto(servicePost.getPostById(id)), HttpStatus.OK);
     }
 
+    @RequestMapping("/posts/mongo/{id}")
+    public ResponseEntity<PostDto> getPostMongoById(@PathVariable int id) {
+        return new ResponseEntity<>(mapperPost.toDto(mongoPostRepository.getPostMongoById(id)), HttpStatus.OK);
+    }
+
     /**
      * Show how to update a data of Post, the input is a json that represent the Post Object
      *
@@ -79,6 +82,7 @@ public class PostController {
     @PutMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> updatePost(@RequestBody final PostDto postDto, @PathVariable final int id) {
         servicePost.updatePostById(mapperPost.toDomain(postDto), id);
+        mongoPostRepository.updatePostMongoById(mapperPost.toMongo(postDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -90,6 +94,7 @@ public class PostController {
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> deletePost(@PathVariable final int id) {
         servicePost.deletePostById(id);
+        mongoPostRepository.deletePostMongoById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

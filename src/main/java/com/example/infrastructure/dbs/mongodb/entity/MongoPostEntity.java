@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MongoPostEntity {
 
     @Id
-//    @Field("id_post")
     private int id_post;
 
     private String title;

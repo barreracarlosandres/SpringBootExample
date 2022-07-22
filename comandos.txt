@@ -28,14 +28,8 @@ docker compose -f yalm/mongodb.yml -p db up -d
 docker compose -p db stop
 
 
-db.createUser(
-  {
-    user: "student",
-    pwd:  "student",   // or cleartext password
-    roles: [ { role: "readWrite", db: "students" },
-             { role: "read", db: "students" } ]
-  }
-)
+use admin
+db.auth("admin", "password")
 
 db.createUser(
   {
