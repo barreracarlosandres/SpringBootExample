@@ -27,6 +27,10 @@ public class MapperPost {
         return new MongoPostEntity(post.getIdPost(), post.getTitle(), post.getBody());
     }
 
+    public MongoPostEntity toMongo(PostDto post) {
+        return new MongoPostEntity(post.getIdPost(), post.getTitle(), post.getBody());
+    }
+
 //    public PostMongoDB toDomainMongo(PostDto newPostToAdd) {
 //        return new PostMongoDB(newPostToAdd.getIdPost(), newPostToAdd.getTitle(), newPostToAdd.getBody());
 //    }

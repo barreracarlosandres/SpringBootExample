@@ -26,3 +26,21 @@ docker run --name some-mongo -d mongo:latest
 
 docker compose -f yalm/mongodb.yml -p db up -d
 docker compose -p db stop
+
+
+db.createUser(
+  {
+    user: "student",
+    pwd:  "student",   // or cleartext password
+    roles: [ { role: "readWrite", db: "students" },
+             { role: "read", db: "students" } ]
+  }
+)
+
+db.createUser(
+  {
+    user: "post",
+    pwd:  "post",   // or cleartext password
+    roles: [ { role: "readWrite", db: "posts" } ]
+  }
+)

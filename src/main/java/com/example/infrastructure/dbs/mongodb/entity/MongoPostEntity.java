@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "posts")
 @AllArgsConstructor
@@ -14,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class MongoPostEntity {
 
     @Id
-    @Field("id_post")
-    private int idPost;
+//    @Field("id_post")
+    private int id_post;
 
     private String title;
     private String body;
