@@ -1,8 +1,9 @@
-package com.example.infrastructure.db.respository;
+package com.example.infrastructure.dbs.respository;
 
 import com.example.common.domain.exceptions.RuntimeExceptionExistValue;
 import com.example.common.infrastructure.exception.RuntimeExceptionNullPost;
 import com.example.domain.Post;
+import com.example.infrastructure.dbs.arraydb.repository.PostArrayDboRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class PostDboRepositoryTest {
     @Test
     void addPostAndThenUndo() {
         // arrange
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         Post post = new Post(100, "tittle", "body");
         postDboRepository.addPost(post);
         postDboRepository.undoAddedPost();
@@ -29,7 +30,7 @@ class PostDboRepositoryTest {
     @Test
     void tryToaAdPostThatExits() {
         // arrange
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         Post post = new Post(1, "tittle", "body");
 
         // act - assert
@@ -41,7 +42,7 @@ class PostDboRepositoryTest {
     @Test
     void deletePostByIdAndThenUndo() {
         // arrange
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         int idPostToDelete = 5;
         // act
         postDboRepository.deletePostById(idPostToDelete);
@@ -53,7 +54,7 @@ class PostDboRepositoryTest {
     @Test
     void updatePostAndThenUndo() {
         // arrange
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         Post postUpdated = new Post(5, "titulo original", "body original");
         int idPostBeforeUpdated = postDboRepository.getPostById(postUpdated.getIdPost()).getIdPost();
         String titleBeforeUpdated = postDboRepository.getPostById(postUpdated.getIdPost()).getTitle();
@@ -71,7 +72,7 @@ class PostDboRepositoryTest {
     @Test
     void tryToUpdatePostThatNOExist() {
         // arrange
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         int idPostToDelete = 100;
         Post postUpdated = new Post(idPostToDelete, "titulo original", "body original");
         // act - assert
@@ -84,7 +85,7 @@ class PostDboRepositoryTest {
     void tryDeletePostThatNotExist() {
         // arrange
         int idPostToDelete = 100;
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         // act - assert
         Exception exception = Assertions.assertThrows(RuntimeExceptionNullPost.class, () ->
                 postDboRepository.deletePostById(idPostToDelete));
@@ -95,7 +96,7 @@ class PostDboRepositoryTest {
     void getAllPosts() {
 
         // arrange
-        PostDboRepository postDboRepository = new PostDboRepository();
+        PostArrayDboRepository postDboRepository = new PostArrayDboRepository();
         // act
         List<Post> posts = postDboRepository.getAllPosts();
         // assert

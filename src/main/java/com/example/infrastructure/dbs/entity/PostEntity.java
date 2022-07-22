@@ -1,4 +1,4 @@
-package com.example.infrastructure.db.dbo;
+package com.example.infrastructure.dbs.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

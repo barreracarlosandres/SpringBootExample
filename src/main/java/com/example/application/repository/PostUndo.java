@@ -1,4 +1,4 @@
-package com.example.application.respository;
+package com.example.application.repository;
 
 public interface PostUndo {
     void undoUpdatedPost();

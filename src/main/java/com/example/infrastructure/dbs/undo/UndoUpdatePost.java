@@ -1,4 +1,4 @@
-package com.example.infrastructure.db.respository.undo;
+package com.example.infrastructure.dbs.undo;
 
 import com.example.domain.Post;
 

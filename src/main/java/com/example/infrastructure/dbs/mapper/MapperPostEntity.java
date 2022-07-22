@@ -1,7 +1,7 @@
-package com.example.infrastructure.db.mapper;
+package com.example.infrastructure.dbs.mapper;
 
 import com.example.domain.Post;
-import com.example.infrastructure.db.dbo.PostEntity;
+import com.example.infrastructure.dbs.entity.PostEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;

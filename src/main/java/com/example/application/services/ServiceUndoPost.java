@@ -1,6 +1,6 @@
 package com.example.application.services;
 
-import com.example.application.respository.PostUndo;
+import com.example.application.repository.PostUndo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ServiceUndoPost {

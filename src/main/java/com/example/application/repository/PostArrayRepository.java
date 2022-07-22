@@ -1,11 +1,11 @@
-package com.example.application.respository;
+package com.example.application.repository;
 
 
 import com.example.domain.Post;
 
 import java.util.List;
 
-public interface PostRepository {
+public interface PostArrayRepository {
     List<Post> getAllPosts();
 
     void addPost(Post newPostToAdd);

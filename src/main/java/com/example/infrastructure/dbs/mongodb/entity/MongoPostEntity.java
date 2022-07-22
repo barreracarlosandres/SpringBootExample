@@ -1,0 +1,24 @@
+package com.example.infrastructure.dbs.mongodb.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+@Document(collection = "posts")
+@AllArgsConstructor
+@Getter
+@Setter
+public class MongoPostEntity {
+
+    @Id
+    @Field("id_post")
+    private int idPost;
+
+    private String title;
+    private String body;
+
+}
+

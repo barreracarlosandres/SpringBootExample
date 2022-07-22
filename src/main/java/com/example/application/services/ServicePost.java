@@ -1,6 +1,6 @@
 package com.example.application.services;
 
-import com.example.application.respository.PostRepository;
+import com.example.application.repository.PostArrayRepository;
 import com.example.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,14 +8,14 @@ import java.util.List;
 
 public class ServicePost {
 
-    private final PostRepository postRepository;
+    private final PostArrayRepository postRepository;
 
     /**
      * Dependency Injection
      * //* @param initialData initial dato of Posts
      */
     @Autowired
-    public ServicePost(PostRepository postRepository) {
+    public ServicePost(PostArrayRepository postRepository) {
         this.postRepository = postRepository;
     }
 

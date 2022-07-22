@@ -1,24 +1,24 @@
-package com.example.infrastructure.db.respository;
+package com.example.infrastructure.dbs.arraydb.repository;
 
 
-import com.example.application.respository.PostUndo;
+import com.example.application.repository.PostUndo;
 import com.example.common.infrastructure.exception.PostMessageExeptions;
-import com.example.application.respository.PostRepository;
+import com.example.application.repository.PostArrayRepository;
 import com.example.common.domain.exceptions.RuntimeExceptionExistValue;
 import com.example.common.infrastructure.exception.RuntimeExceptionNullPost;
 import com.example.domain.Post;
-import com.example.infrastructure.db.mapper.MapperPostEntity;
-import com.example.infrastructure.db.respository.db.ArrayPosts;
-import com.example.infrastructure.db.respository.undo.UndoAddedPost;
-import com.example.infrastructure.db.respository.undo.UndoDeletePost;
-import com.example.infrastructure.db.respository.undo.UndoUpdatePost;
+import com.example.infrastructure.dbs.mapper.MapperPostEntity;
+import com.example.infrastructure.dbs.arraydb.db.ArrayPosts;
+import com.example.infrastructure.dbs.undo.UndoAddedPost;
+import com.example.infrastructure.dbs.undo.UndoDeletePost;
+import com.example.infrastructure.dbs.undo.UndoUpdatePost;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class PostDboRepository implements PostRepository, PostUndo {
+public class PostArrayDboRepository implements PostArrayRepository, PostUndo {
 
     private final MapperPostEntity mapperPostEntity = new MapperPostEntity();
 

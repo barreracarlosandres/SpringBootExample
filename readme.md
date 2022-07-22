@@ -13,7 +13,8 @@
   - Refactor de código y ajustes a clean code
 - paso 7
   - Se adicionó dockerfile para generar container
-  - Se configurti OpenTelemetry
+  - Se configuró OpenTelemetry
+  - Se adicionó funcionalidad para que también se guarde información en BD mongoDB
 ### Métodos implementados
 | Método (podría con postman) | Cómo usarlo                                                                                                           | Retorna                                       |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
@@ -37,4 +38,3 @@
 - Spring boot 2.7.1
 - Lombok 1.18.24
 - Junit 5.8.2
-- Opentelemetry 1.15

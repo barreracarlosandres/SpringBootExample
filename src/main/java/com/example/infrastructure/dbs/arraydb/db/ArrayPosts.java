@@ -1,6 +1,6 @@
-package com.example.infrastructure.db.respository.db;
+package com.example.infrastructure.dbs.arraydb.db;
 
-import com.example.infrastructure.db.dbo.PostEntity;
+import com.example.infrastructure.dbs.entity.PostEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

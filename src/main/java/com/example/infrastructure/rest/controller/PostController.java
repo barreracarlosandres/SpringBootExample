@@ -1,8 +1,8 @@
 package com.example.infrastructure.rest.controller;
 
 
-import com.example.application.services.ServiceUndoPost;
 import com.example.application.services.ServicePost;
+import com.example.application.services.ServiceUndoPost;
 import com.example.infrastructure.rest.dto.PostDto;
 import com.example.infrastructure.rest.mapper.MapperPost;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,9 @@ public class PostController {
 
 
     private final ServicePost servicePost;
-
     private final ServiceUndoPost serviceUndoPost;
+
+//    private MongoServicePost mongoServicePost;
 
     private final MapperPost mapperPost;
 
@@ -27,7 +28,7 @@ public class PostController {
      * Nota: It´s not necessary use the @Autowared, I use just for explicit it
      */
     @Autowired
-    public PostController(ServicePost servicePost, ServiceUndoPost serviceUndoPost,MapperPost mapperPost) {
+    public PostController(ServicePost servicePost, ServiceUndoPost serviceUndoPost, MapperPost mapperPost) {
         this.servicePost = servicePost;
         this.serviceUndoPost = serviceUndoPost;
         this.mapperPost = mapperPost;
@@ -62,6 +63,7 @@ public class PostController {
     @PostMapping("/posts")
     public ResponseEntity<HttpStatus> addPost(@RequestBody final PostDto postDto) {
         servicePost.addPost(mapperPost.toDomain(postDto));
+//        servicePostMongo.addPost(postDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
