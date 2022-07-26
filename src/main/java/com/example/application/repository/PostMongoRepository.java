@@ -1,19 +1,18 @@
 package com.example.application.repository;
 
-import com.example.infrastructure.dbs.mongodb.entity.MongoPostEntity;
+import com.example.infrastructure.dbs.mongodb.entity.PostEntityMongo;
 
 public interface PostMongoRepository {
 
 //    List<Post> getAllPosts();
+//    TODO pendiente por implementar este
 
-    MongoPostEntity getPostMongoById(int idPostToFind);
+    PostEntityMongo getById(int idPostToReturn);
 
-    void addPostMongo(MongoPostEntity post);
+    void insert(PostEntityMongo newPostToInsert);
 
-    void deletePostMongoById(int idPostToDelete);
+    void deleteById(int idPostToDelete);
 
-    void updatePostMongoById(MongoPostEntity postUpdated);
-
-
+    void updateById(PostEntityMongo postUpdated);
 
 }

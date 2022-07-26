@@ -11,15 +11,15 @@ public class ServiceUndoPost {
         this.postUndo = postUndo;
     }
 
-    public void undoUpdatedPostInActiveSession() {
-        postUndo.undoUpdatedPost();
+    public void undoUpdatedInActiveSession() {
+        postUndo.undoLastUpdate();
     }
 
-    public void undoDeletedPostInActiveSession() {
-        postUndo.undoDeletedPost();
+    public void undoDeletedInActiveSession() {
+        postUndo.undoLastDelete();
     }
 
-    public void undoAddedPostInActiveSession() {
-        postUndo.undoAddedPost();
+    public void undoAddedInActiveSession() {
+        postUndo.undoLastInsert();
     }
 }

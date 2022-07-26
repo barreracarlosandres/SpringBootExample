@@ -3,9 +3,9 @@ package com.example.infrastructure.rest.controller;
 
 import com.example.application.services.ServicePost;
 import com.example.application.services.ServiceUndoPost;
-import com.example.infrastructure.dbs.mongodb.repository.MongoPostRepository;
+import com.example.infrastructure.dbs.mongodb.repository.PostDtoMongoRepository;
 import com.example.infrastructure.rest.dto.PostDto;
-import com.example.infrastructure.rest.mapper.MapperPost;
+import com.example.infrastructure.rest.mapper.MapperDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +19,20 @@ public class PostController {
 
     private final ServicePost servicePost;
     private final ServiceUndoPost serviceUndoPost;
-    private MongoPostRepository mongoPostRepository;
+    private PostDtoMongoRepository postDtoMongoRepository;
 
-    private final MapperPost mapperPost;
+    private final MapperDto mapperDto;
 
     /**
      * Dependency Injection
      * Nota: It´s not necessary use the @Autowared, I use just for explicit it
      */
     @Autowired
-    public PostController(ServicePost servicePost, ServiceUndoPost serviceUndoPost, MongoPostRepository mongoPostRepository, MapperPost mapperPost) {
+    public PostController(ServicePost servicePost, ServiceUndoPost serviceUndoPost, PostDtoMongoRepository postDtoMongoRepository, MapperDto mapperDto) {
         this.servicePost = servicePost;
         this.serviceUndoPost = serviceUndoPost;
-        this.mongoPostRepository = mongoPostRepository;
-        this.mapperPost = mapperPost;
+        this.postDtoMongoRepository = postDtoMongoRepository;
+        this.mapperDto = mapperDto;
     }
 
     /**
@@ -42,7 +42,7 @@ public class PostController {
      */
     @RequestMapping("/posts")
     public ResponseEntity<List<PostDto>> getPosts() {
-        return new ResponseEntity<>(mapperPost.toDto(servicePost.getPosts()), HttpStatus.OK);
+        return new ResponseEntity<>(mapperDto.toDto(servicePost.get()), HttpStatus.OK);
     }
 
     /**
@@ -53,12 +53,12 @@ public class PostController {
      */
     @RequestMapping("/posts/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable int id) {
-        return new ResponseEntity<>(mapperPost.toDto(servicePost.getPostById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(mapperDto.toDto(servicePost.getById(id)), HttpStatus.OK);
     }
 
     @RequestMapping("/posts/mongo/{id}")
     public ResponseEntity<PostDto> getPostMongoById(@PathVariable int id) {
-        return new ResponseEntity<>(mapperPost.toDto(mongoPostRepository.getPostMongoById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(mapperDto.toDto(postDtoMongoRepository.getById(id)), HttpStatus.OK);
     }
 
     /**
@@ -68,8 +68,8 @@ public class PostController {
      */
     @PostMapping("/posts")
     public ResponseEntity<HttpStatus> addPost(@RequestBody final PostDto postDto) {
-        servicePost.addPost(mapperPost.toDomain(postDto));
-        mongoPostRepository.addPostMongo(mapperPost.toMongo(postDto));
+        servicePost.insert(mapperDto.toDomain(postDto));
+        postDtoMongoRepository.insert(mapperDto.toMongo(postDto));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -81,8 +81,8 @@ public class PostController {
      */
     @PutMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> updatePost(@RequestBody final PostDto postDto, @PathVariable final int id) {
-        servicePost.updatePostById(mapperPost.toDomain(postDto), id);
-        mongoPostRepository.updatePostMongoById(mapperPost.toMongo(postDto));
+        servicePost.updateById(mapperDto.toDomain(postDto), id);
+        postDtoMongoRepository.updateById(mapperDto.toMongo(postDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -93,26 +93,26 @@ public class PostController {
      */
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<HttpStatus> deletePost(@PathVariable final int id) {
-        servicePost.deletePostById(id);
-        mongoPostRepository.deletePostMongoById(id);
+        servicePost.deleteById(id);
+        postDtoMongoRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/posts/undoUpdated")
     public ResponseEntity<HttpStatus> undoUpdatedPost() {
-        serviceUndoPost.undoUpdatedPostInActiveSession();
+        serviceUndoPost.undoUpdatedInActiveSession();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/posts/undoDeleted")
     public ResponseEntity<HttpStatus> undoDeletedPost() {
-        serviceUndoPost.undoDeletedPostInActiveSession();
+        serviceUndoPost.undoDeletedInActiveSession();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/posts/undoAdded")
     public ResponseEntity<HttpStatus> undoAddedPost() {
-        serviceUndoPost.undoAddedPostInActiveSession();
+        serviceUndoPost.undoAddedInActiveSession();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

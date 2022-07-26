@@ -27,11 +27,16 @@ docker run --name some-mongo -d mongo:latest
 docker compose -f yalm/mongodb.yml -p db up -d
 docker compose -p db stop
 
+docker exec -it db-mongo-1 mongosh
+
 
 use admin
-db.auth("admin", "password")
+db.auth("roor", "example")
 
-db.createUser(
+db.auth("post", "post")
+
+
+db.createUser(db
   {
     user: "post",
     pwd:  "post",   // or cleartext password

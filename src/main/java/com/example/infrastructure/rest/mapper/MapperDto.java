@@ -1,13 +1,13 @@
 package com.example.infrastructure.rest.mapper;
 
 import com.example.domain.Post;
-import com.example.infrastructure.dbs.mongodb.entity.MongoPostEntity;
+import com.example.infrastructure.dbs.mongodb.entity.PostEntityMongo;
 import com.example.infrastructure.rest.dto.PostDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MapperPost {
+public class MapperDto {
 
 //    TODO se puede pasar a mapper annotation
 
@@ -15,7 +15,7 @@ public class MapperPost {
         return new PostDto(post.getIdPost(), post.getTitle(), post.getBody());
     }
 
-    public PostDto toDto(MongoPostEntity post) {
+    public PostDto toDto(PostEntityMongo post) {
         return new PostDto(post.getId_post(), post.getTitle(), post.getBody());
     }
 
@@ -27,15 +27,8 @@ public class MapperPost {
         return new Post(postDto.getIdPost(), postDto.getTitle(), postDto.getBody());
     }
 
-    public MongoPostEntity toMongo(Post post) {
-        return new MongoPostEntity(post.getIdPost(), post.getTitle(), post.getBody());
+    public PostEntityMongo toMongo(PostDto post) {
+        return new PostEntityMongo(post.getIdPost(), post.getTitle(), post.getBody());
     }
 
-    public MongoPostEntity toMongo(PostDto post) {
-        return new MongoPostEntity(post.getIdPost(), post.getTitle(), post.getBody());
-    }
-
-//    public PostMongoDB toDomainMongo(PostDto newPostToAdd) {
-//        return new PostMongoDB(newPostToAdd.getIdPost(), newPostToAdd.getTitle(), newPostToAdd.getBody());
-//    }
 }

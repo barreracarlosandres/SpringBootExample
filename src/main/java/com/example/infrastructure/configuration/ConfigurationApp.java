@@ -2,9 +2,10 @@ package com.example.infrastructure.configuration;
 
 import com.example.application.services.ServicePost;
 import com.example.application.services.ServiceUndoPost;
+import com.example.infrastructure.dbs.arraydb.db.ArrayPosts;
 import com.example.infrastructure.dbs.arraydb.repository.PostArrayDboRepository;
-import com.example.infrastructure.dbs.mapper.MapperPostEntity;
-import com.example.infrastructure.rest.mapper.MapperPost;
+import com.example.infrastructure.dbs.mapper.MapperDdo;
+import com.example.infrastructure.rest.mapper.MapperDto;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -18,7 +19,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @ComponentScan("com.example")
-//@EnableMongoRepositories
 @EnableMongoRepositories(basePackages = {"com.example"})
 public class ConfigurationApp {
 
@@ -39,7 +39,7 @@ public class ConfigurationApp {
 
     @Bean
     private static PostArrayDboRepository postDboRepository() {
-        return new PostArrayDboRepository();
+        return new PostArrayDboRepository(ArrayPosts.getInstance());
     }
 
     @Bean
@@ -53,13 +53,13 @@ public class ConfigurationApp {
     }
 
     @Bean
-    public MapperPost mapperPost() {
-        return new MapperPost();
+    public MapperDto mapperPost() {
+        return new MapperDto();
     }
 
     @Bean
-    public MapperPostEntity mapperPostEntity() {
-        return new MapperPostEntity();
+    public MapperDdo mapperPostEntity() {
+        return new MapperDdo();
     }
 
     @Bean
@@ -76,10 +76,8 @@ public class ConfigurationApp {
     }
 
     private String getUrlMongoDB() {
-        return "mongodb://"+this.username+":"+this.password+"@"+this.host+":"+this.port+"/" + this.mongoDBName + "?authSource=admin";
+        return "mongodb://" + this.username + ":" + this.password + "@" + this.host + ":" + this.port + "/" + this.mongoDBName + "?authSource=admin";
     }
-
-
 
 
 }

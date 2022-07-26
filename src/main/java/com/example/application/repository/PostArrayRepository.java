@@ -6,14 +6,13 @@ import com.example.domain.Post;
 import java.util.List;
 
 public interface PostArrayRepository {
-    List<Post> getAllPosts();
+    List<Post> getAll();
 
-    void addPost(Post newPostToAdd);
+    void insert(Post newPostToInsert);
 
-    Post getPostById(int idPostToFind);
+    Post getById(int idPostToFind);
 
-    void deletePostById(int idPostToDelete);
+    void deleteById(int idPostToDelete);
 
-    void updatePostById(Post postUpdated, int idPostToUpdate);
-
+    void updateById(Post postUpdated, int idPostToUpdate);
 }

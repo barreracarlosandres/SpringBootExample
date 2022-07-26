@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Getter
 @Setter
-public class MongoPostEntity {
+public class PostEntityMongo {
 
     @Id
     private int id_post;

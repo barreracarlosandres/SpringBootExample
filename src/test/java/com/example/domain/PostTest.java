@@ -27,7 +27,6 @@ class PostTest {
         // arrange
         CommandPost commandPost = new PostTestBuilder().withPostId(0).build();
         //act - assert
-//        Exception exception = Assertions.assertThrows(RuntimeExceptionValue.class, () -> new Post(commandPost.getIdPost(), commandPost.getTitle(), commandPost.getBody()));
         try{
             new Post(commandPost.getIdPost(), commandPost.getTitle(), commandPost.getBody());
         }

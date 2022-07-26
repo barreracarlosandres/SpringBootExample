@@ -24,27 +24,27 @@ public class ServicePost {
      *
      * @return List of Posts
      */
-    public List<Post> getPosts() {
-        return postRepository.getAllPosts();
+    public List<Post> get() {
+        return postRepository.getAll();
     }
 
     /**
      * Function to get the post by id
      *
-     * @param idPostToFind the id, unique, that represent the Post
+     * @param idPostToReturn the id, unique, that represent the Post
      * @return Post found in the array
      */
-    public Post getPostById(int idPostToFind) {
-        return postRepository.getPostById(idPostToFind);
+    public Post getById(int idPostToReturn) {
+        return postRepository.getById(idPostToReturn);
     }
 
     /**
      * Funtion to add Post to the Array
      *
-     * @param postToAdd object that represent the Post Object to be added
+     * @param postToInsert object that represent the Post Object to be added
      */
-    public void addPost(Post postToAdd) {
-        postRepository.addPost(postToAdd);
+    public void insert(Post postToInsert) {
+        postRepository.insert(postToInsert);
     }
 
     /**
@@ -53,8 +53,8 @@ public class ServicePost {
      * @param postUpdated   Object that correspond to the new data of Post to be updated
      * @param idPostToUpdate id that represent Post to be updated
      */
-    public void updatePostById(Post postUpdated, int idPostToUpdate) {
-        postRepository.updatePostById(postUpdated, idPostToUpdate);
+    public void updateById(Post postUpdated, int idPostToUpdate) {
+        postRepository.updateById(postUpdated, idPostToUpdate);
     }
 
     /**
@@ -62,7 +62,7 @@ public class ServicePost {
      *
      * @param idPostToDelete id that represent the Post to be deleted
      */
-    public void deletePostById(int idPostToDelete) {
-        postRepository.deletePostById(idPostToDelete);
+    public void deleteById(int idPostToDelete) {
+        postRepository.deleteById(idPostToDelete);
     }
 }

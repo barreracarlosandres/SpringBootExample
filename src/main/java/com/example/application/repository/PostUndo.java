@@ -1,9 +1,9 @@
 package com.example.application.repository;
 
 public interface PostUndo {
-    void undoUpdatedPost();
+    void undoLastUpdate();
 
-    void undoDeletedPost();
+    void undoLastDelete();
 
-    void undoAddedPost();
+    void undoLastInsert();
 }

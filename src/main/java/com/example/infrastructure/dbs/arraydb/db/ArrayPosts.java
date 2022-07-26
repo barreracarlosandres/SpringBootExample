@@ -1,6 +1,6 @@
 package com.example.infrastructure.dbs.arraydb.db;
 
-import com.example.infrastructure.dbs.entity.PostEntity;
+import com.example.infrastructure.dbs.arraydb.entity.PostEntityArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,15 +12,15 @@ public final class ArrayPosts {
 
     private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
-    private List<PostEntity> postsList = new ArrayList<>(
+    private List<PostEntityArray> postsList = new ArrayList<>(
             Arrays.asList(
-                    new PostEntity(1, "accounts", getDemoText()),
-                    new PostEntity(2, "chevy", getDemoText()),
-                    new PostEntity(3, "cooking", getDemoText()),
-                    new PostEntity(4, "not", getDemoText()),
-                    new PostEntity(5, "know", getDemoText()),
-                    new PostEntity(6, "know", getDemoText()),
-                    new PostEntity(7, "know", getDemoText())));
+                    new PostEntityArray(1, "accounts", getDemoText()),
+                    new PostEntityArray(2, "chevy", getDemoText()),
+                    new PostEntityArray(3, "cooking", getDemoText()),
+                    new PostEntityArray(4, "not", getDemoText()),
+                    new PostEntityArray(5, "know", getDemoText()),
+                    new PostEntityArray(6, "know", getDemoText()),
+                    new PostEntityArray(7, "know", getDemoText())));
 
     private ArrayPosts() {
     }
@@ -32,13 +32,10 @@ public final class ArrayPosts {
         return arrayPosts;
     }
 
-    public List<PostEntity> getAllPosts() {
+    public List<PostEntityArray> getAllPosts() {
         return new ArrayList<>(postsList);        // Did it to get inmutable List
     }
 
-    /**
-     * @return The Lorem Ipsum text
-     */
     private static String getDemoText() {
         return ArrayPosts.LOREM_IPSUM;
     }
@@ -47,19 +44,19 @@ public final class ArrayPosts {
         return postsList.size();
     }
 
-    public boolean add(PostEntity newPostEntityToAdd) {
-        return postsList.add(newPostEntityToAdd);
+    public boolean insert(PostEntityArray newPostEntityArrayToInsert) {
+        return postsList.add(newPostEntityArrayToInsert);
     }
 
-    public PostEntity get(int postId) {
-        return postsList.get(postId);
+    public PostEntityArray get(int postIdToReturn) {
+        return postsList.get(postIdToReturn);
     }
 
-    public void remove(int i) {
-        postsList.remove(i);
+    public void remove(int idPostToRemove) {
+        postsList.remove(idPostToRemove);
     }
 
-    public void set(int postId, PostEntity toDdo) {
-        postsList.set(postId, toDdo);
+    public void update(int postId, PostEntityArray postUpdated) {
+        postsList.set(postId, postUpdated);
     }
 }
