@@ -10,22 +10,19 @@ public class Post {
     private String title;
     private String body;
 
-    /**
-     * Constructor that represent a Post Object
-     *
-     * @param idPost identifier of Post. It must be unique, I don't implement tha restriction it would be a good challenge for you
-     * @param title  the title of Post
-     * @param body   the text of Post
-     */
     public Post(int idPost, String title, String body) {
 
-        Validations.valueGreaterThanZero(idPost, PostMessageExeptions.ID_POST_DEBE_SER_MAYOR_QUE_0);
-        Validations.notNull(title, PostMessageExeptions.EL_TITULO_NO_PUEDE_SER_NULO);
-        Validations.notNull(body, PostMessageExeptions.EL_CUERPO_DEL_POST_NO_PUEDE_SER_NULO);
+        preCondition(idPost, title, body);
 
         this.idPost = idPost;
         this.title = title;
         this.body = body;
+    }
+
+    private static void preCondition(int idPost, String title, String body) {
+        Validations.valueGreaterThanZero(idPost, PostMessageExeptions.ID_POST_DEBE_SER_MAYOR_QUE_0);
+        Validations.notNull(title, PostMessageExeptions.EL_TITULO_NO_PUEDE_SER_NULO);
+        Validations.notNull(body, PostMessageExeptions.EL_CUERPO_DEL_POST_NO_PUEDE_SER_NULO);
     }
 }
 

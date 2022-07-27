@@ -24,7 +24,8 @@ public class PostDtoMongoRepository implements PostMongoRepository {
 
     @Override
     public void insert(PostEntityMongo newPostToInsert) {
-        mongoTemplate.insert(newPostToInsert);
+        // TODO valida porqué no pasan los test cuandos se cambia save por insert
+        mongoTemplate.save(newPostToInsert);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class PostDtoMongoRepository implements PostMongoRepository {
         mongoTemplate.save(postUpdated);
     }
 
-    private Query getQueryToSearchById(int idPostToReturn){
+    private Query getQueryToSearchById(int idPostToReturn) {
         return Query.query(Criteria.where("_id").is(idPostToReturn));
     }
 }

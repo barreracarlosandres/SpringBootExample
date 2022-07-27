@@ -9,9 +9,14 @@ import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -21,6 +26,8 @@ public class MongoDbSpringIntegrationTest {
 
     private MongodExecutable mongodExecutable;
     private MongoTemplate mongoTemplate;
+
+    private PostDtoMongoRepository postDtoMongoRepository;
 
     @AfterEach
     void clean() {
@@ -38,27 +45,30 @@ public class MongoDbSpringIntegrationTest {
         mongodExecutable = starter.prepare(mongodConfig);
         mongodExecutable.start();
         mongoTemplate = new MongoTemplate(MongoClients.create(String.format(CONNECTION_STRING, ip, port)), "test");
+
+        postDtoMongoRepository = new PostDtoMongoRepository(mongoTemplate);
     }
 
     @Test
     void getById() {
         // Arrange
-        PostDtoMongoRepository postDtoMongoRepository = new PostDtoMongoRepository(mongoTemplate);
         PostEntityMongo postEntityMongo = new PostEntityMongo(1, "titulo", "body");
-        postDtoMongoRepository.insert(postEntityMongo);
-        // Act - Assert
-        Assertions.assertEquals(1, postDtoMongoRepository.getById(1).getId_post());
+        // Act
+        mongoTemplate.insert(postEntityMongo);
+        // Act
+        Assertions.assertEquals(postEntityMongo.toString(), postDtoMongoRepository.getById(1).toString());
     }
 
     @Test
     void insert() {
 
         // Arrange
-        PostDtoMongoRepository postDtoMongoRepository = new PostDtoMongoRepository(mongoTemplate);
-        PostEntityMongo postEntityMongo = new PostEntityMongo(1, "titulo", "body");
+//        PostDtoMongoRepository postDtoMongoRepository = new PostDtoMongoRepository(mongoTemplate);
+        PostEntityMongo postEntityMongo = new PostEntityMongo(2, "titulo", "body");
+        // Act
         postDtoMongoRepository.insert(postEntityMongo);
         // Act - Assert
-        Assertions.assertEquals(1, postDtoMongoRepository.getById(1).getId_post());
+        Assertions.assertEquals(postEntityMongo.toString(), mongoTemplate.findOne(Query.query(Criteria.where("_id").is(postEntityMongo.getId_post())), PostEntityMongo.class).toString());
 
     }
 }

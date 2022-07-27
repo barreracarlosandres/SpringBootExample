@@ -115,13 +115,20 @@ public class PostArrayDboRepository implements PostArrayRepository, PostUndo {
     }
 
     private int getPositionInDBOfPost(int idPost) {
-        int positionPost = -1;
-        for (int i = 0; i < arrayPosts.size(); i++) {
-            if (arrayPosts.get(i).getIdPost() == idPost) {
-                positionPost = i;
+        int finalPositionPostInArray = -1;
+
+        finalPositionPostInArray = findPostInArray(idPost, finalPositionPostInArray);
+
+        return finalPositionPostInArray;
+    }
+
+    private int findPostInArray(int idPost, int finalPositionPostInArray) {
+        for (int positionArray = 0; positionArray < arrayPosts.size(); positionArray++) {
+            if (arrayPosts.get(positionArray).getIdPost() == idPost) {
+                finalPositionPostInArray = positionArray;
                 break;
             }
         }
-        return positionPost;
+        return finalPositionPostInArray;
     }
 }
