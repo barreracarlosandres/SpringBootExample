@@ -58,15 +58,15 @@ class PostControllerTest {
     }
 
     @Test
-    void addNewPostOk() throws Exception {
+    void insertPostOk() throws Exception {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(11).withTitle("New Tittle").build();
         //act - assert
-        this.postToAddNewPostOk(post);
+        this.postToInsertOk(post);
     }
 
     @Test
-    void tryToAddPostThatExits() throws Exception {
+    void tryToInsertPostThatExits() throws Exception {
         //arrange
         CommandPost post = new PostControllerTestBuilder()
                 .withPostId(1)
@@ -80,7 +80,7 @@ class PostControllerTest {
     }
 
     @Test
-    void tryToAddNewBadPostWithIdPostCero() throws Exception {
+    void tryTInsertBadPostWithIdPostCero() throws Exception {
         //arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(0).build();
         //act - assert
@@ -115,9 +115,13 @@ class PostControllerTest {
     @Test
     void deletePostByIdThatExits() throws Exception {
         // arrange
-        CommandPost post = new PostControllerTestBuilder().withPostId(5).withTitle("Prueba add").build();
+        CommandPost post = new PostControllerTestBuilder().withPostId(4).withTitle("Prueba add").build();
         // act - assert
-        this.deletePostByIdPost(post);
+//        this.deletePostByIdPost(post);
+        mocMvc.perform(delete("/posts/{idPost}", post.getIdPost())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -136,6 +140,7 @@ class PostControllerTest {
     void undoDeletePostOk() throws Exception {
         // Arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(7).build();
+//        this.postToAddNewPostOk(post);
         this.deletePostByIdPost(post);
         // Act - Assert
         mocMvc.perform(put("/posts/undoDeleted")
@@ -145,10 +150,10 @@ class PostControllerTest {
     }
 
     @Test
-    void undoAddPostOk() throws Exception {
+    void undoInsertPostOk() throws Exception {
         // Arrange
         CommandPost post = new PostControllerTestBuilder().withPostId(15).build();
-        this.postToAddNewPostOk(post);
+        this.postToInsertOk(post);
         // Act - Assert
         mocMvc.perform(put("/posts/undoAdded")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -186,7 +191,7 @@ class PostControllerTest {
                 .andExpect(status().isOk());
     }
 
-    private void postToAddNewPostOk(CommandPost post) throws Exception {
+    private void postToInsertOk(CommandPost post) throws Exception {
         mocMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(post)))
