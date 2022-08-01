@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-jdk-alpine
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 ADD build/libs/SpringBootExample-1.0.jar /app.jar

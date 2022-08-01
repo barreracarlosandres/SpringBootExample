@@ -1,5 +1,9 @@
 docker build -t posts .
 
+docker build -t config-server .
+
+docker build -t eureka-server .
+
 docker run -d \
 --name jaeger-all-in-one \
 --network "posts" \
@@ -22,12 +26,20 @@ otel/opentelemetry-collector:0.41.0 "--config=/etc/otel-collector-config.yaml"
 
 docker run -d --name posts --network "posts" -p 8090:8090 posts
 
+docker run -d --name config-server --network "posts" -p 8899:8888 config-server:v1
+
+docker run -d --name eureka-server --network "posts" -p 8761:8761 eureka-server:latest
+
 docker run --name some-mongo -d mongo:latest
 
 docker compose -f yalm/mongodb.yml -p db up -d
 docker compose -p db stop
 
 docker exec -it db-mongo-1 mongosh
+
+docker exec -it nginx sh
+
+sysctl net.ipv4.ip_forward
 
 
 use admin

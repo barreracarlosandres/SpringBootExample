@@ -10,10 +10,12 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -22,19 +24,22 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = {"com.example"})
 public class ConfigurationApp {
 
-    @Value("${spring.data.mongodb.database}")
+    @Autowired
+    Environment env;
+
+//    @Value("${spring.data.mongodb.database}")
     private String mongoDBName;
 
-    @Value("${spring.data.mongodb.host}")
+//    @Value("${spring.data.mongodb.host}")
     private String host;
 
-    @Value("${spring.data.mongodb.port}")
+//    @Value("${spring.data.mongodb.port}")
     private String port;
 
-    @Value("${spring.data.mongodb.username}")
+//    @Value("${spring.data.mongodb.username}")
     private String username;
 
-    @Value("${spring.data.mongodb.password}")
+//    @Value("${spring.data.mongodb.password}")
     private String password;
 
     @Bean
@@ -76,6 +81,13 @@ public class ConfigurationApp {
     }
 
     private String getUrlMongoDB() {
+
+        this.mongoDBName = env.getProperty("spring.data.mongodb.database");
+        this.host = env.getProperty("spring.data.mongodb.host");
+        this.port = env.getProperty("spring.data.mongodb.port");
+        this.username = env.getProperty("spring.data.mongodb.username");
+        this.password = env.getProperty("spring.data.mongodb.password");
+
         return "mongodb://" + this.username + ":" + this.password + "@" + this.host + ":" + this.port + "/" + this.mongoDBName + "?authSource=admin";
     }
 

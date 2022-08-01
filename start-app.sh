@@ -4,5 +4,5 @@ java  -Dotel.exporter.otlp.endpoint=http://otelcollector:4317 \
       -Dotel.exporter.otlp.logs.endpoint=otel.exporter.otlp.logs.endpoint \
       -Dotel.service.name=posts \
       -javaagent:opentelemetry-javaagent.jar \
-      -jar \
+      -jar -Dspring.profiles.active=prod \
       /app.jar
