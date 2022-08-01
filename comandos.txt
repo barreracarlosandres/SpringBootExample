@@ -45,12 +45,12 @@ sysctl net.ipv4.ip_forward
 
 
 use admin
-db.auth("roor", "example")
+db.auth("root", "example")
 
 db.auth("post", "post")
 
 
-db.createUser(db
+db.createUser(
   {
     user: "post",
     pwd:  "post",   // or cleartext password
